@@ -1,13 +1,13 @@
 public class ArrayDeque<E> implements Deque<E> {
 
     // size == (capacity + lp - fp - 1) % capacity
-    int size;
-    int capacity;
-    E[] items;
+    private int size;
+    private int capacity;
+    private E[] items;
     // When size == 0 or size == capacity, lp == fp + 1;
     // fp and lp refer to the next position the new item should be put in.
-    int fp;
-    int lp;
+    private int fp;
+    private int lp;
 
     public ArrayDeque() {
         size = 0;
@@ -78,7 +78,9 @@ public class ArrayDeque<E> implements Deque<E> {
 
     @Override
     public void printDeque() {
-
+        for (int i = 0; i < size(); i++) {
+            System.out.print(String.valueOf(get(i)) + " ");
+        }
     }
 
     @Override
@@ -91,6 +93,7 @@ public class ArrayDeque<E> implements Deque<E> {
         fp = ++fp % capacity;
         E result = items[fp];
         items[fp] = null;
+        size--;
         return result;
     }
 
@@ -106,6 +109,7 @@ public class ArrayDeque<E> implements Deque<E> {
         lp = --lp % capacity + capacity;
         E result = items[lp];
         items[lp] = null;
+        size--;
         return result;
     }
 
