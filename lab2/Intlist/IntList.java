@@ -1,3 +1,5 @@
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.util.Formatter;
 
 /**
@@ -82,7 +84,11 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return B;
+        }
+        reachTheEnd(A).rest = B;
+        return A;
     }
 
     /**
@@ -91,15 +97,48 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        IntList copyA = copyListRecursively(A);
+        IntList copyB = copyListRecursively(B);
+        if (copyA == null) {
+            return copyB;
+        }
+        reachTheEnd(copyA).rest = copyB;
+        return copyA;
     }
 
+    private static IntList reachTheEnd(IntList list) {
+        if (list.rest == null) {
+            return list;
+        }
+        return reachTheEnd(list.rest);
+    }
 
+    private static IntList copyList(IntList list) {
+        IntList head = null;
+        IntList rear = null;
+        IntList cursor = list;
 
+        if (cursor == null) {
+            return null;
+        }
 
+        head = new IntList(cursor.first, null);
+        rear = head;
+        while (cursor.rest != null) {
+            cursor = cursor.rest;
+            rear.rest = new IntList(cursor.first, null);
+            rear = rear.rest;
+        }
 
+        return head;
+    }
 
-
+    private static IntList copyListRecursively(IntList list) {
+        if (list == null) {
+            return null;
+        }
+        return new IntList(list.first, copyListRecursively(list.rest));
+    }
 
 
 
