@@ -1,5 +1,3 @@
-import java.lang.reflect.InvocationTargetException;
-
 public class ArrayDeque<E> implements Deque<E> {
 
     // size == (capacity + lp - fp - 1) % capacity
@@ -53,7 +51,7 @@ public class ArrayDeque<E> implements Deque<E> {
         items[fp] = item;
         // mod operation prodeuce negative result when its dividend is a negative integer
         // add a divisor to the result to produce a positive remainder.
-        fp = (--fp + capacity) % capacity;
+        fp = --fp % capacity + capacity;
         size++;
     }
 
@@ -94,7 +92,6 @@ public class ArrayDeque<E> implements Deque<E> {
         // Note that fp may refer to the last item in a real array.
         fp = ++fp % capacity;
         E result = items[fp];
-//        result = (E) items[fp].getClass().getMethod("clone").invoke(items[fp]);
         items[fp] = null;
         size--;
         return result;
@@ -109,7 +106,7 @@ public class ArrayDeque<E> implements Deque<E> {
         // Mod operation prodeuce negative result when its dividend is a negative integer.
         // Add a divisor to the result to produce a positive remainder.
         // Note that lp may refer to the first item in a real array.
-        lp = (--lp + capacity) % capacity;
+        lp = --lp % capacity + capacity;
         E result = items[lp];
         items[lp] = null;
         size--;
@@ -127,9 +124,6 @@ public class ArrayDeque<E> implements Deque<E> {
     }
 
     public static void main(String[] args) {
-        Integer a = Integer.valueOf(1);
-        Integer b = a;
-        a = null;
-        System.out.println(b);
+
     }
 }

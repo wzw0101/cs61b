@@ -28,8 +28,11 @@ public class ArrayDequeTest {
         ad.addFirst(10);
         assertEquals(false, ad.isEmpty());
 
-        ad.removeFirst();
+        ad.addFirst(20);
+        assertEquals(Integer.valueOf(10), ad.removeLast());
+        assertEquals(Integer.valueOf(20), ad.removeLast());
         assertEquals(true, ad.isEmpty());
 
     }
+
 }
