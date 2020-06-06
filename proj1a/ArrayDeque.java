@@ -85,6 +85,17 @@ public class ArrayDeque<E> implements Deque<E> {
         }
     }
 
+    private void compressAfterRemove() {
+        if (capacity >= 16 && capacity / size >= 4) {
+            capacity /= 2;
+            E[] _items = (E[]) new Object[capacity];
+            for(int i = 1; i <= size; i++) {
+                _items[i] = get(i - 1);
+            }
+            items = _items;
+        }
+    }
+
     @Override
     public E removeFirst() {
         if (size == 0) {
@@ -97,6 +108,7 @@ public class ArrayDeque<E> implements Deque<E> {
 //        result = (E) items[fp].getClass().getMethod("clone").invoke(items[fp]);
         items[fp] = null;
         size--;
+        compressAfterRemove();
         return result;
     }
 
@@ -113,6 +125,7 @@ public class ArrayDeque<E> implements Deque<E> {
         E result = items[lp];
         items[lp] = null;
         size--;
+        compressAfterRemove();
         return result;
     }
 
@@ -127,9 +140,6 @@ public class ArrayDeque<E> implements Deque<E> {
     }
 
     public static void main(String[] args) {
-        Integer a = Integer.valueOf(1);
-        Integer b = a;
-        a = null;
-        System.out.println(b);
+        System.out.println(17 / 4);
     }
 }

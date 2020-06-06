@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,4 +36,18 @@ public class ArrayDequeTest {
 
     }
 
+    @Test
+    public void compressTest() {
+        ArrayDeque<Integer> ad = new ArrayDeque<>();
+        for (int i = 0; i < 9; i++) {
+            ad.addFirst(i);
+        }
+        assertEquals(9, ad.size());
+//        assertEquals(16, ad.capacity);
+        for (int i = 0; i < 5; i++) {
+            ad.removeFirst();
+        }
+        assertEquals(4, ad.size());
+//        assertEquals(8, ad.capacity);
+    }
 }
