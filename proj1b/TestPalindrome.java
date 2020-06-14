@@ -1,11 +1,18 @@
+<<<<<<< HEAD
 import org.junit.Test;
+=======
+/*import org.junit.Test;
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7
 import static org.junit.Assert.*;
 
 public class TestPalindrome {
     // You must use this palindrome, and not instantiate
     // new Palindromes, or the autograder might be upset.
     static Palindrome palindrome = new Palindrome();
+<<<<<<< HEAD
     static OffByOne offByOne = new OffByOne();
+=======
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7
 
     @Test
     public void testWordToDeque() {
@@ -16,6 +23,7 @@ public class TestPalindrome {
         }
         assertEquals("persiflage", actual);
     }
+<<<<<<< HEAD
 
     @Test
     public void testIsPalindromeReturnsTrue() {
@@ -49,3 +57,6 @@ public class TestPalindrome {
         assertFalse(palindrome.isPalindrome("weird", offByOne));
     }
 }
+=======
+}     Uncomment this class once you've created your Palindrome class. */
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7

@@ -1,12 +1,10 @@
 package es.datastructur.synthesizer;
 
-import javax.sound.midi.Soundbank;
 
-//Make sure this class is public
+//Note: This file will not compile until you complete task 1 (BoundedQueue).
 public class GuitarString {
-    /** Constants. Do not change. In case you're curious, the keyword final means
-     * the values cannot be changed at runtime. We'll discuss this and other topics
-     * in lecture on Friday. */
+    /** Constants. Do not change. In case you're curious, the keyword final
+     * means the values cannot be changed at runtime. */
     private static final int SR = 44100;      // Sampling Rate
     private static final double DECAY = .996; // energy decay factor
 
@@ -43,7 +41,7 @@ public class GuitarString {
     }
 
     /* Advance the simulation one time step by performing one iteration of
-     * the Karplus-Strong algorithm. 
+     * the Karplus-Strong algorithm.
      */
     public void tic() {
         // TODO: Dequeue the front sample and enqueue a new sample that is
@@ -74,3 +72,4 @@ public class GuitarString {
     }
 
 }
+

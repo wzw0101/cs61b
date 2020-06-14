@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import org.omg.PortableInterceptor.INACTIVE;
 
+=======
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7
 import java.util.Formatter;
 
 /**
@@ -84,11 +87,15 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
+<<<<<<< HEAD
         if (A == null) {
             return B;
         }
         reachTheEnd(A).rest = B;
         return A;
+=======
+        return null;
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7
     }
 
     /**
@@ -97,6 +104,7 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
+<<<<<<< HEAD
         IntList copyA = copyListRecursively(A);
         IntList copyB = copyListRecursively(B);
         if (copyA == null) {
@@ -139,6 +147,17 @@ public class IntList {
         }
         return new IntList(list.first, copyListRecursively(list.rest));
     }
+=======
+        return null;
+    }
+
+
+
+
+
+
+
+>>>>>>> f81312d8d4213a7da5d32b68cf8ed5685caf27a7
 
 
 

@@ -28,7 +28,7 @@ public class TestGuitarString {
     @Test
     public void testTic() {
         // Create a GuitarString of frequency 11025, which
-        // is an ArrayRingBuffer of length 4. 
+        // is an ArrayRingBuffer of length 4.
         GuitarString s = new GuitarString(11025);
         s.pluck();
 
@@ -36,7 +36,7 @@ public class TestGuitarString {
         double s1 = s.sample();
         s.tic();
         double s2 = s.sample();
-        s.tic(); 
+        s.tic();
         double s3 = s.sample();
         s.tic();
         double s4 = s.sample();
@@ -59,4 +59,4 @@ public class TestGuitarString {
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(TestGuitarString.class);
     }
-} 
+}
