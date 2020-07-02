@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * An implementation of a motile pacifist photosynthesizer.
@@ -30,15 +31,31 @@ public class Plip extends Creature {
      */
     private int b;
 
+    private static final double ENERGY_UPPER_BOUND = 2;
+    private static final double ENERGY_LOWER_BOUND = 0;
+    private static final double ENERGY_LOSE_WHEN_MOVING = 0.15;
+    private static final double ENERGY_GAIN_WHEN_STAYING = 0.2;
+    private static final double REP_ENERGY_RETAIN = 0.5;
+    private static final double REP_ENERGY_GIVEN = 0.5;
+
+    private double validateEnergy(double e) {
+        if (e > ENERGY_UPPER_BOUND) {
+            e = ENERGY_UPPER_BOUND;
+        } else if  (e < ENERGY_LOWER_BOUND) {
+            e = ENERGY_LOWER_BOUND;
+        }
+        return e;
+    }
+
     /**
      * creates plip with energy equal to E.
      */
     public Plip(double e) {
         super("plip");
-        r = 0;
-        g = 0;
-        b = 0;
-        energy = e;
+        r = 99;
+        g = getR();
+        b = 76;
+        energy = validateEnergy(e);
     }
 
     /**
@@ -46,6 +63,18 @@ public class Plip extends Creature {
      */
     public Plip() {
         this(1);
+    }
+
+    public int getG() {
+        return (int) Math.round(96 * energy) + 63;
+    }
+
+    public int getR() {
+        return r;
+    }
+
+    public int getB() {
+        return b;
     }
 
     /**
@@ -57,8 +86,7 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
-        return color(r, g, b);
+        return color(getR(), getG(), getB());
     }
 
     /**
@@ -74,7 +102,7 @@ public class Plip extends Creature {
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        // TODO
+        energy = validateEnergy(energy - ENERGY_LOSE_WHEN_MOVING);
     }
 
 
@@ -82,7 +110,7 @@ public class Plip extends Creature {
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
     public void stay() {
-        // TODO
+        energy = validateEnergy(energy + ENERGY_GAIN_WHEN_STAYING);
     }
 
     /**
@@ -91,7 +119,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        Plip p = new Plip(energy * REP_ENERGY_GIVEN);
+        energy *= REP_ENERGY_RETAIN;
+        return p;
     }
 
     /**
@@ -111,20 +141,44 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
+        for (Direction d : neighbors.keySet()) {
+            Occupant occupant = neighbors.get(d);
+            if (occupant.name() == "empty") {
+                emptyNeighbors.add(d);
+            } else if (occupant.name() == "clorus") {
+                anyClorus = true;
+            }
+        }
 
-        if (false) { // FIXME
-            // TODO
+        if (emptyNeighbors.size() == 0) {
+            return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
+        if (energy() >= 1) {
+            Direction direction = randomDirectionChoice(emptyNeighbors);
+            return new Action(Action.ActionType.REPLICATE, direction);
+        }
 
         // Rule 3
+        if (anyClorus && new Random().nextBoolean()) {
+            Direction direction = randomDirectionChoice(emptyNeighbors);
+            return new Action(Action.ActionType.MOVE, direction);
+        }
 
         // Rule 4
         return new Action(Action.ActionType.STAY);
     }
+
+    private Direction randomDirectionChoice(Deque<Direction> emptyNeighbors) {
+        int choice = new Random().nextInt(emptyNeighbors.size());
+        Direction d = emptyNeighbors.removeFirst();
+        for (int i = 0; i < choice; i++) {
+            d = emptyNeighbors.removeFirst();
+        }
+        return d;
+    }
+
 }
