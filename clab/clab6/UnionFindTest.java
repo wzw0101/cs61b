@@ -1,7 +1,7 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class TestUnionFind {
+public class UnionFindTest {
     @Test
     public void testSizeOf() {
         UnionFind uf = new UnionFind(16);
