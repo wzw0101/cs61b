@@ -66,6 +66,21 @@ public class BST<Key extends Comparable<Key>> {
         return getRandomNode(root).key;
     }
 
+    private int internalPathLength() {
+        return internalPathLengthHelper(root, 0);
+    }
+
+    private int internalPathLengthHelper(Node node, int depth) {
+        if (node == null) return 0;
+        return depth + internalPathLengthHelper(node.left, depth + 1)
+                     + internalPathLengthHelper(node.right, depth + 1);
+    }
+
+    public double averageDepth() {
+        if (isEmpty()) throw new IllegalStateException("computing average depth when tree is empty.");
+        return internalPathLength() / (double) size();
+    }
+
 
     /** Private methods and variables follow. There's no need to read
      *  any of this.
