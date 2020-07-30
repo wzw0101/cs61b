@@ -1,6 +1,9 @@
 package hw3.hash;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+
+import edu.princeton.cs.algs4.Complex;
 import edu.princeton.cs.algs4.StdDraw;
 import java.awt.Color;
 import edu.princeton.cs.algs4.StdRandom;
@@ -13,6 +16,8 @@ public class ComplexOomage implements Oomage {
     public int hashCode() {
         int total = 0;
         for (int x : params) {
+            // the result of the value of the hashcode modulo 256 equals the same remainder if the final 4 bits of the param
+            // remains same.
             total = total * 256;
             total = total + x;
         }
@@ -80,11 +85,38 @@ public class ComplexOomage implements Oomage {
         return new ComplexOomage(params);
     }
 
+    public static ComplexOomage deadlyComplexOomage() {
+        int N = StdRandom.uniform(4, 10);
+        ArrayList<Integer> params = new ArrayList<>(N);
+        for (int i = 0; i < N - 1; i += 1) {
+            params.add(StdRandom.uniform(0, 255));
+        }
+        params.add(7);
+        return new ComplexOomage(params);
+    }
+
     public static void main(String[] args) {
-        System.out.println("Drawing 4 random complex Oomages.");
-        randomComplexOomage().draw(0.25, 0.25, 1.5);
-        randomComplexOomage().draw(0.75, 0.75, 1.5);
-        randomComplexOomage().draw(0.25, 0.75, 1.5);
-        randomComplexOomage().draw(0.75, 0.25, 1.5);
+//        System.out.println("Drawing 4 random complex Oomages.");
+//        randomComplexOomage().draw(0.25, 0.25, 1.5);
+//        randomComplexOomage().draw(0.75, 0.75, 1.5);
+//        randomComplexOomage().draw(0.25, 0.75, 1.5);
+//        randomComplexOomage().draw(0.75, 0.25, 1.5);
+        List<Oomage> oomages = new ArrayList<>();
+        int N = 10000;
+
+        for (int i = 0; i < N; i += 1) {
+            oomages.add(ComplexOomage.deadlyComplexOomage());
+        }
+        int[] hashes = new int[128];
+        Arrays.fill(hashes, 0);
+        for (Oomage oomage : oomages) {
+            hashes[(oomage.hashCode() & 0x7FFFFFFF) % 128]++;
+        }
+        int max = Arrays.stream(hashes).max().getAsInt();
+        for (int i = 0; i < hashes.length; i++) {
+            if (hashes[i] == max) {
+                System.out.println(i);
+            }
+        }
     }
 } 
