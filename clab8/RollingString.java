@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 /**
  * A String-like class that allows users to add and remove characters in the String
  * in constant time and have a constant-time hash function. Used for the Rabin-Karp
@@ -17,6 +20,9 @@ class RollingString{
      */
     static final int PRIMEBASE = 6113;
 
+    private char[] chars;
+    private int first;
+
     /**
      * Initializes a RollingString with a current value of String s.
      * s must be the same length as the maximum length.
@@ -24,6 +30,12 @@ class RollingString{
     public RollingString(String s, int length) {
         assert(s.length() == length);
         /* FIX ME */
+        chars = s.toCharArray();
+        first = 0;
+        hash = 0;
+        for (char c : chars) {
+            hash = ((hash * UNIQUECHARS) % PRIMEBASE + Character.hashCode(c)) % PRIMEBASE;
+        }
     }
 
     /**
@@ -33,6 +45,13 @@ class RollingString{
      */
     public void addChar(char c) {
         /* FIX ME */
+        int hlc = Character.hashCode(chars[first]);
+        for (int i = 0; i < chars.length - 1; i++) {
+            hlc = hlc * UNIQUECHARS % PRIMEBASE;
+        }
+        hash = ((hash + PRIMEBASE - hlc) * UNIQUECHARS + Character.hashCode(c)) % PRIMEBASE;
+        chars[first] = c;
+        first = (first + 1) % chars.length;
     }
 
 
@@ -44,7 +63,10 @@ class RollingString{
     public String toString() {
         StringBuilder strb = new StringBuilder();
         /* FIX ME */
-        return "";
+        for (int cf = first; cf != first + chars.length; cf++){
+            strb.append(chars[cf % chars.length]);
+        }
+        return strb.toString();
     }
 
     /**
@@ -53,7 +75,7 @@ class RollingString{
      */
     public int length() {
         /* FIX ME */
-        return -1;
+        return chars.length;
     }
 
 
@@ -65,8 +87,14 @@ class RollingString{
     @Override
     public boolean equals(Object o) {
         /* FIX ME */
-        return false;
+        if (o == null) return false;
+        if (o == this) return true;
+        if (o.getClass() != getClass()) return false;
+        RollingString ors = (RollingString) o;
+        return Arrays.equals(chars, ors.chars);
     }
+
+    private int hash;
 
     /**
      * Returns the hashcode of the stored "string".
@@ -75,6 +103,11 @@ class RollingString{
     @Override
     public int hashCode() {
         /* FIX ME */
-        return -1;
+        return hash;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(128 * 6113);
+        System.out.println(Integer.MAX_VALUE);
     }
 }
