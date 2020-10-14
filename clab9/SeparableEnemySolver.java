@@ -6,6 +6,11 @@ public class SeparableEnemySolver {
 
     Graph g;
 
+    final int UNGROUPED = -1;
+    final int GROUP0 = 0;
+    final int GROUP1 = 1;
+    final int GROUP_SIZE = 2;
+
     /**
      * Creates a SeparableEnemySolver for a file with name filename. Enemy
      * relationships are biderectional (if A is an enemy of B, B is an enemy of A).
@@ -23,10 +28,69 @@ public class SeparableEnemySolver {
      * Returns true if input is separable, false otherwise.
      */
     public boolean isSeparable() {
-        // TODO: Fix me
-        return false;
+
+
+        Set<String> labels = g.labels();
+        // Record the group ids for labels.
+        // Divide all labels into two groups with id 0 and 1, -1 if the label has not been grouped.
+        Map<String, Integer> labelToGroupId = new HashMap<>();
+        // Index whether a label/vertex has been visited through BFS.
+        Map<String, Boolean> marked = new HashMap<>();
+        for (String label : labels) {
+            labelToGroupId.put(label, UNGROUPED);
+            marked.put(label, false);
+        }
+        // Fringe queue used for DFS operation.
+        Queue<String> queue = new LinkedList<>();
+
+        // Iterate through the labels/vertices in case some disconnected vertices are not visited
+        // by previous BFS.
+        for (String label : labels) {
+            // BFS operation on a vertex ensures complete inclusion of vertices in a connected graph.
+            // Therefore, for each time of the for iteration, an ungrouped vertex represent a new sub-graph
+            // that has not been searched.
+            if (labelToGroupId.get(label).equals(UNGROUPED)) {
+                labelToGroupId.put(label, GROUP0);
+                if (!visit(label, labelToGroupId, marked, queue)) {
+                    return false;
+                }
+
+                while (queue.peek() != null) {
+                    String visiting = queue.remove();
+                    if (!visit(visiting, labelToGroupId, marked, queue)) {
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        return true;
     }
 
+    private boolean visit(String visiting, Map<String, Integer> labelToGroupId,
+                          Map<String, Boolean> marked, Queue<String> queue) {
+        marked.put(visiting, true);
+        Set<String> neighbors = g.neighbors(visiting);
+        int groupId = labelToGroupId.get(visiting);
+        // every vertex directly connected with this visiting vertex should be put in the opposite group.
+        int oppositeGroupId = (groupId + 1) % GROUP_SIZE;
+
+        for (String neighbor : neighbors) {
+            int neighborGroupId = labelToGroupId.get(neighbor);
+            if (neighborGroupId == UNGROUPED) {
+                labelToGroupId.put(neighbor, oppositeGroupId);
+            } else if (neighborGroupId != oppositeGroupId) {
+                // If the neighbor's group id has been set and is not in the opposite group,
+                // a conflict shows up in the grouping process, meaning the graph is not separable.
+                return false;
+            }
+            if (marked.get(neighbor).equals(false)) {
+                queue.add(neighbor);
+            }
+        }
+        return true;
+    }
 
     /* HELPERS FOR READING IN CSV FILES. */
 
